@@ -1,5 +1,5 @@
 # Multi-stage build for Spring Boot application
-FROM maven:3.9.6-eclipse-temurin-21 AS build
+FROM maven:3.9.6 AS build
 
 # Set working directory
 WORKDIR /app
@@ -17,7 +17,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Runtime stage
-FROM eclipse-temurin:21-jdk-jre-alpine
+FROM openjdk:17-jdk-slim
 
 # Create a volume for temporary files
 VOLUME /tmp
