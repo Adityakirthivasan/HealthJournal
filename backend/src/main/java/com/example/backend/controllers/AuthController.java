@@ -36,6 +36,11 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @GetMapping("/test")
+    public ResponseEntity<?> test() {
+        return ResponseEntity.ok(Collections.singletonMap("message", "Backend is working!"));
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> user) throws Exception {
         String username = user.get("username");
@@ -56,14 +61,22 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserDetailsDto userDto) {
+        System.out.println("Registration request received: " + userDto.getUsername());
+        
         if (userRepo.findByUsername(userDto.getUsername()).isPresent()) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("error", "Username already exists"));
         }
 
         List<Role> roles = new ArrayList<>();
-        for (String roleName : userDto.getRoleNames()) {
-            Role role = roleRepo.findByName(roleName).orElseGet(() -> roleRepo.save(new Role(roleName)));
-            roles.add(role);
+        if (userDto.getRoleNames() != null) {
+            for (String roleName : userDto.getRoleNames()) {
+                Role role = roleRepo.findByName(roleName).orElseGet(() -> roleRepo.save(new Role(roleName)));
+                roles.add(role);
+            }
+        } else {
+            // Default role if none provided
+            Role defaultRole = roleRepo.findByName("USER").orElseGet(() -> roleRepo.save(new Role("USER")));
+            roles.add(defaultRole);
         }
 
         User user = new User();
@@ -74,12 +87,17 @@ public class AuthController {
         user.setRoles(roles);
 
         userRepo.save(user);
+        System.out.println("User registered successfully: " + user.getUsername());
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(userDto.getUsername(), userDto.getPassword())
-        );
-        String token = jwtTokenProvider.generateToken(authentication);
-
-        return ResponseEntity.ok(Collections.singletonMap("token", token));
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(userDto.getUsername(), userDto.getPassword())
+            );
+            String token = jwtTokenProvider.generateToken(authentication);
+            return ResponseEntity.ok(Collections.singletonMap("token", token));
+        } catch (Exception e) {
+            System.out.println("Authentication error after registration: " + e.getMessage());
+            return ResponseEntity.ok(Collections.singletonMap("message", "Registration successful"));
+        }
     }
 }
