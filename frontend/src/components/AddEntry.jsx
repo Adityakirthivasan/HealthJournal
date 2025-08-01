@@ -27,7 +27,7 @@ const AddEntry = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:8080/entries", entry, {
+      const response = await axios.post("https://healthjournal-1.onrender.com/entries", entry, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

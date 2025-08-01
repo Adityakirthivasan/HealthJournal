@@ -5,7 +5,7 @@ const Journals = () => {
   const [entries, setEntries] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:8080/entries/public")
+    axios.get("https://healthjournal-1.onrender.com/entries/public")
       .then((res) => setEntries(res.data))
       .catch((err) => console.error("Failed to fetch", err));
   }, []);

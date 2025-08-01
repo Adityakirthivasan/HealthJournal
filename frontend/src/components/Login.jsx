@@ -10,7 +10,7 @@ const Login = () => {
   async function handleLogin(e) {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:8080/api/auth/login", {
+      const res = await axios.post("https://healthjournal-1.onrender.com/api/auth/login", {
         username,
         password,
       });

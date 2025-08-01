@@ -13,7 +13,7 @@ const Profile = () => {
     }
 
     axios
-      .get("http://localhost:8080/profile", {
+              .get("https://healthjournal-1.onrender.com/profile", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

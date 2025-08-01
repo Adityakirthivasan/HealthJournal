@@ -20,7 +20,7 @@ const ViewEntries = () => {
   const fetchEntries = async () => {
     const token = localStorage.getItem("token");
     try {
-      const response = await axios.get("http://localhost:8080/entries", {
+      const response = await axios.get("https://healthjournal-1.onrender.com/entries", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setEntries(response.data);
@@ -45,7 +45,7 @@ const ViewEntries = () => {
   const handleDelete = async (id) => {
     const token = localStorage.getItem("token");
     try {
-      await axios.delete(`http://localhost:8080/entries/${id}`, {
+              await axios.delete(`https://healthjournal-1.onrender.com/entries/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const updated = entries.filter((e) => e.id !== id);
@@ -86,7 +86,7 @@ const ViewEntries = () => {
   const handleUpdate = async () => {
     const token = localStorage.getItem("token");
     try {
-      await axios.put(`http://localhost:8080/entries/${editingId}`, editForm, {
+              await axios.put(`https://healthjournal-1.onrender.com/entries/${editingId}`, editForm, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchEntries();

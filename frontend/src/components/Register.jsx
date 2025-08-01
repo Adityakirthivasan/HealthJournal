@@ -12,7 +12,7 @@ const Register = () => {
   async function handleRegister(e) {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8080/api/auth/register", {
+      await axios.post("https://healthjournal-1.onrender.com/api/auth/register", {
         name,
         email,
         username,
