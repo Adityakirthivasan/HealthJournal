@@ -70,12 +70,18 @@ public class AuthController {
         List<Role> roles = new ArrayList<>();
         if (userDto.getRoleNames() != null) {
             for (String roleName : userDto.getRoleNames()) {
-                Role role = roleRepo.findByName(roleName).orElseGet(() -> roleRepo.save(new Role(roleName)));
+                Role role = roleRepo.findByName(roleName).orElseGet(() -> {
+                    Role newRole = new Role(roleName);
+                    return roleRepo.save(newRole);
+                });
                 roles.add(role);
             }
         } else {
             // Default role if none provided
-            Role defaultRole = roleRepo.findByName("USER").orElseGet(() -> roleRepo.save(new Role("USER")));
+            Role defaultRole = roleRepo.findByName("USER").orElseGet(() -> {
+                Role newRole = new Role("USER");
+                return roleRepo.save(newRole);
+            });
             roles.add(defaultRole);
         }
 
