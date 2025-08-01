@@ -36,7 +36,7 @@ const AddEntry = () => {
 
       alert("Entry added successfully!");
 
-      // Reset form
+      
       setEntry({
         title: "",
         content: "",
